@@ -1,4 +1,5 @@
 import discord
+import os
 
 tmp_channels: set[discord.VoiceChannel] = set()
 
@@ -48,6 +49,11 @@ async def hello(ctx: discord.ApplicationContext):
         except discord.errors.Forbidden:
             print(f'No permission to edit nickname of {user}')
 
+if "DISCORD_TOKEN" in os.environ:
+    token = os.environ['DISCORD_TOKEN']
+else:
+    f = open("token.txt", 'r')
+    token = f.readline()
 
-bot.run('NTc2MzkzMTg1MjQ5NDYwMjQw.GXsQCT.QVIZFuZfTKnsjBFUE3cgcog_0K5z-yw_25lmW4')
+bot.run(token)
 
