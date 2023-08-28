@@ -3,18 +3,22 @@ import os
 
 tmp_channels: set[discord.VoiceChannel] = set()
 
+def get_log_channel(guild: discord.Guild):
+    all_channel = [x for x in guild.channels if isinstance(x, discord.TextChannel)]
+    log_channel = all_channel[0]
+    for i in all_channel:
+        if 'bot' in i.name:
+            log_channel = i
+            break
+    return log_channel
+
 class Bot(discord.Bot):
     async def on_ready(self):
         print(f'Logged in as {self.user}!')
 
         for guild in self.guilds:
-            await [x for x in guild.channels if isinstance(x, discord.TextChannel)][0].send('I am online!')
+            await get_log_channel(guild).send('I am online!')
             print(guild.name)
-
-    async def on_message(self, msg: discord.Message):
-        print(f'{msg.author}: {msg.content}!')
-        if msg.author.id != self.user.id:
-            await msg.channel.send(f'{msg.author} {self.user}')
 
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         # perms = member.guild.self_role.permissions
@@ -26,11 +30,13 @@ class Bot(discord.Bot):
                 await member.move_to(channel)
             except discord.errors.Forbidden:
                 print('forbidden')
+                await get_log_channel(c.guild).send('forbidden')
 
         for c in tmp_channels:
             if len(c.members) == 0:
                 tmp_channels.remove(c)
                 await c.delete()
+                break
 
 
 intents = discord.Intents.default()
