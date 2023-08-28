@@ -1,0 +1,9 @@
+[Unit]
+Description=Discord Bot Process
+
+[Service]
+WorkingDirectory=%h/neko-bot
+ExecStart=/usr/bin/python3.9 %h/neko-bot/main.py
+
+[Install]
+WantedBy=default.target
