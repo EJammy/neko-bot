@@ -25,7 +25,7 @@ class Bot(discord.Bot):
         c = after.channel
         if c and "new" in c.name.lower():
             try:
-                channel = await c.guild.create_voice_channel(f"{member.name}'s channel", category=c.category)
+                channel = await c.guild.create_voice_channel(f"{member.name}'s channel", overwrites=c.overwrites,category=c.category)
                 tmp_channels.add(channel)
                 await member.move_to(channel)
             except discord.errors.Forbidden:
