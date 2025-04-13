@@ -52,11 +52,11 @@ bot = Bot(intents=intents)
 async def hello(ctx: discord.ApplicationContext):
     await ctx.respond(f"Hello {ctx.author.display_name}!")
     print(ctx.guild.name)
-    for user in ctx.guild.members:
-        try:
-            await user.edit(nick='FOO')
-        except discord.errors.Forbidden:
-            print(f'No permission to edit nickname of {user}')
+    # for user in ctx.guild.members:
+    #     try:
+    #         await user.edit(nick=None)
+    #     except discord.errors.Forbidden:
+    #         print(f'No permission to edit nickname of {user}')
 
 if "DISCORD_TOKEN" in os.environ:
     token = os.environ['DISCORD_TOKEN']
