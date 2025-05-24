@@ -26,6 +26,7 @@ def wake_server() -> str|None:
                 time.sleep(1)
             return b''
 
+        print('requesting challenge...')
         challenge = send_recv(b'\x01' + b'\x00' * 7)
         if len(challenge) == 0:
             return 'failed to send receive challenge'
@@ -33,6 +34,8 @@ def wake_server() -> str|None:
         print('sending request to wake...' + str(code))
         ret = send_recv(code)
         print(ret)
+        if ret != b'\x01\x01\x01\x01':
+            return f'error with code: {ret}'
 
     return None
 

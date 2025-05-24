@@ -1,5 +1,8 @@
 import discord
-import os
+import config
+
+import logging
+logging.basicConfig(level=logging.WARN)
 
 from start_server import wake_server
 
@@ -62,13 +65,11 @@ async def hello(ctx: discord.ApplicationContext):
     #     except discord.errors.Forbidden:
     #         print(f'No permission to edit nickname of {user}')
 
-@bot.slash_command(name='start-server')
+@bot.slash_command(name='start-server', guild_ids = [938831215069376584, 623108814786265089])
 async def start_server(ctx: discord.ApplicationContext):
-    return
-    # x: discord.Guild = ctx.guild()
-    # TODO: check gid
-    ctx.guild_id()
-    # TODO: check user perms
+    # return
+    if ctx.author.id != 313531597062406146:
+        print('permission denied')
 
     await ctx.respond('starting server...')
     err = wake_server()
@@ -77,11 +78,5 @@ async def start_server(ctx: discord.ApplicationContext):
     else:
         await ctx.respond('failed: ' + err)
 
-if "DISCORD_TOKEN" in os.environ:
-    token = os.environ['DISCORD_TOKEN']
-else:
-    f = open("token.txt", 'r')
-    token = f.readline()
-
-bot.run(token)
+bot.run(config.TOKEN)
 
