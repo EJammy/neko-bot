@@ -1,6 +1,8 @@
 import discord
 import os
 
+from start_server import wake_server
+
 tmp_channels: set[discord.VoiceChannel] = set()
 
 def get_log_channel(guild: discord.Guild):
@@ -23,6 +25,8 @@ class Bot(discord.Bot):
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         # perms = member.guild.self_role.permissions
         c = after.channel
+
+        # create a new voice channel for the user
         if c and "new" in c.name.lower():
             try:
                 channel = await c.guild.create_voice_channel(
@@ -57,6 +61,21 @@ async def hello(ctx: discord.ApplicationContext):
     #         await user.edit(nick=None)
     #     except discord.errors.Forbidden:
     #         print(f'No permission to edit nickname of {user}')
+
+@bot.slash_command(name='start-server')
+async def start_server(ctx: discord.ApplicationContext):
+    return
+    # x: discord.Guild = ctx.guild()
+    # TODO: check gid
+    ctx.guild_id()
+    # TODO: check user perms
+
+    await ctx.respond('starting server...')
+    err = wake_server()
+    if err is None:
+        await ctx.respond('success!')
+    else:
+        await ctx.respond('failed: ' + err)
 
 if "DISCORD_TOKEN" in os.environ:
     token = os.environ['DISCORD_TOKEN']

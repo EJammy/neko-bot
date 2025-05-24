@@ -1,2 +1,14 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+.pypirc
+dist/
+
 token.txt
 .venv
+
+config.toml
+secret_key.bin
+
