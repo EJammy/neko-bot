@@ -75,7 +75,7 @@ async def start_server(ctx: discord.ApplicationContext):
     try:
         err = wake_server()
     except Exception as e:
-        ctx.respond('internal error...')
+        await ctx.respond('internal error...')
         raise
 
     if err is None:
