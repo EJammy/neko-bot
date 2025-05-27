@@ -72,7 +72,12 @@ async def start_server(ctx: discord.ApplicationContext):
         print('permission denied')
 
     await ctx.respond('starting server...')
-    err = wake_server()
+    try:
+        err = wake_server()
+    except Exception as e:
+        ctx.respond('internal error...')
+        raise
+
     if err is None:
         await ctx.respond('success!')
     else:

@@ -9,6 +9,7 @@ def wake_server() -> str|None:
     """
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         s.settimeout(5)
+        print(f'connecting to {(config.HOST, config.WOL_PORT)}')
         s.connect((config.HOST, config.WOL_PORT))
 
         def send_recv(data: bytes):
