@@ -2,6 +2,11 @@ import socket
 import time
 import hmac
 import config
+import dns.resolver
+import dns.rdtypes.IN.A
+
+resolver = dns.resolver.Resolver()
+resolver.nameservers = ['8.8.8.8']
 
 def wake_server() -> str|None:
     """
@@ -10,7 +15,11 @@ def wake_server() -> str|None:
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         s.settimeout(5)
         print(f'connecting to {(config.HOST, config.WOL_PORT)}')
-        s.connect((config.HOST, config.WOL_PORT))
+
+        record  = resolver.resolve(config.HOST)[0]
+        assert isinstance(record, dns.rdtypes.IN.A.A)
+        host_ip = record.to_text()
+        s.connect((host_ip, config.WOL_PORT))
 
         def send_recv(data: bytes):
             i = 10
